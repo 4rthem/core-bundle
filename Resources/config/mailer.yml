@@ -1,0 +1,8 @@
+
+services:
+    _defaults:
+        autowire: true
+
+    Arthem\Bundle\CoreBundle\Mailer\Mailer: ~
+
+    Arthem\Bundle\CoreBundle\Mailer\MailerInterface: "@Arthem\\Bundle\\CoreBundle\\Mailer\\Mailer"

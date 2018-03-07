@@ -1,0 +1,6 @@
+
+services:
+    Arthem\Bundle\CoreBundle\Logger\SessionRequestProcessor:
+        autowire: true
+        tags:
+            - { name: monolog.processor, method: processRecord }

@@ -1,0 +1,13 @@
+
+name:
+    invalid: Invalid name
+
+age:
+    min: "You must be over {{ min_age }}"
+    max: "You must be under {{ max_age }}"
+
+date_range:
+    invalid: Invalid date range
+
+email:
+    already_taken: Email is already in use

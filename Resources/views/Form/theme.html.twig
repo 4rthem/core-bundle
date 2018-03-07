@@ -1,0 +1,89 @@
+
+{% block google_autocomplete_widget %}
+    <div id="{{ id }}-wrapper">
+        {{ form_widget(form) }}
+    </div>
+    <script>
+        function {{ id }}_initAutocomplete() {
+            document.addEventListener("DOMContentLoaded", function() {
+                window.arthem.ArthemGoogleAutoComplete(
+                    '{{ form.inputAddress.vars.id }}',
+                    '{{ form.inputAddress.vars.id }}',
+                    '{{ form.addressLine1.vars.id }}',
+                    '{{ form.postalCode.vars.id }}',
+                    '{{ form.city.vars.id }}',
+                    '{{ form.region.vars.id }}',
+                    '{{ form.country.vars.id }}',
+                    '{{ form.latitude.vars.id }}',
+                    '{{ form.longitude.vars.id }}'
+                );
+            });
+        }
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key={{ api_key }}&libraries=places&language={{ app.request.locale }}&callback={{ id }}_initAutocomplete"
+            defer></script>
+{% endblock %}
+
+{% block google_autocomplete_row %}
+    {% set force_error = true %}
+    {{- block('form_row') }}
+{% endblock %}
+
+{% block address_autocomplete_row %}
+    {%- if label is empty -%}
+        {%- if label_format is not empty -%}
+            {% set label = label_format|replace({
+            '%name%': name,
+            '%id%': id,
+            }) %}
+        {%- else -%}
+            {% set label = name|humanize %}
+        {%- endif -%}
+    {%- endif -%}
+
+    <div class="form-title">{{ label|trans }}</div>
+    <div id="{{ id }}-wrapper" class="form-subgroup{% if not valid %} has-error{% endif %}">
+        {{ form_row(form.addressLine1) }}
+        {{ form_row(form.addressLine2) }}
+
+        <div class="row">
+            <div class="col-xs-6">
+                {{ form_row(form.city) }}
+            </div>
+            <div class="col-xs-6">
+                {{ form_row(form.postalCode) }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-6">
+                {{ form_row(form.region) }}
+            </div>
+            <div class="col-xs-6">
+                {{ form_row(form.country) }}
+            </div>
+        </div>
+    {{ form_widget(form.latitude) }}
+    {{ form_widget(form.longitude) }}
+    {{ form_widget(form.inputAddress) }}
+    {{ form_errors(form) }}
+    </div>
+    <script>
+        function {{ id }}_initAutocomplete() {
+            document.addEventListener("DOMContentLoaded", function () {
+                window.arthem.ArthemGoogleAutoComplete(
+                    '{{ form.addressLine1.vars.id }}',
+                    '{{ form.inputAddress.vars.id }}',
+                    '{{ form.addressLine1.vars.id }}',
+                    '{{ form.postalCode.vars.id }}',
+                    '{{ form.city.vars.id }}',
+                    '{{ form.region.vars.id }}',
+                    '{{ form.country.vars.id }}',
+                    '{{ form.latitude.vars.id }}',
+                    '{{ form.longitude.vars.id }}'
+                );
+            });
+        }
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key={{ api_key }}&libraries=places&language={{ app.request.locale }}&callback={{ id }}_initAutocomplete"
+            defer></script>
+{% endblock %}

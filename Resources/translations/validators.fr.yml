@@ -1,0 +1,17 @@
+
+name:
+    invalid: Ce n'est pas un nom correct
+
+age:
+    min: "Vous devez avoir plus de {{ min_age }} ans"
+    max: "Vous devez avoir moins de {{ max_age }} ans"
+
+date_range:
+    invalid: L'intervalle de date n'est pas valide
+
+csrf_token.invalid: Votre session a expiré
+
+"This value should not be null.": Ce champ est obligatoire.
+
+email:
+    already_taken: Cette adresse e-mail est déjà prise
