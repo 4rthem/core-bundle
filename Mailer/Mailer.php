@@ -198,10 +198,10 @@ class Mailer implements MailerInterface, LoggerAwareInterface
 
         $this->mailer->send($message);
 
-        $this->logger->info(sprintf('Email sent', [
+        $this->logger->info('Email sent', [
             'email' => $toEmail,
             'template' => $templateName,
-        ]));
+        ]);
 
         return $message;
     }
