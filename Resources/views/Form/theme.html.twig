@@ -33,15 +33,15 @@
     {%- if label is empty -%}
         {%- if label_format is not empty -%}
             {% set label = label_format|replace({
-            '%name%': name,
-            '%id%': id,
+                '%name%': name,
+                '%id%': id,
             }) %}
         {%- else -%}
             {% set label = name|humanize %}
         {%- endif -%}
     {%- endif -%}
 
-    <div class="form-title">{{ label|trans }}</div>
+    <label class="control-label">{{ label|trans }}</label>
     <div id="{{ id }}-wrapper" class="form-subgroup{% if not valid %} has-error{% endif %}">
         {{ form_row(form.addressLine1) }}
         {{ form_row(form.addressLine2) }}
@@ -62,10 +62,10 @@
                 {{ form_row(form.country) }}
             </div>
         </div>
-    {{ form_widget(form.latitude) }}
-    {{ form_widget(form.longitude) }}
-    {{ form_widget(form.inputAddress) }}
-    {{ form_errors(form) }}
+        {{ form_widget(form.latitude) }}
+        {{ form_widget(form.longitude) }}
+        {{ form_widget(form.inputAddress) }}
+        {{ form_errors(form) }}
     </div>
     <script>
         function {{ id }}_initAutocomplete() {
