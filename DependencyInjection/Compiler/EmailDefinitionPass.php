@@ -23,7 +23,7 @@ class EmailDefinitionPass implements CompilerPassInterface
         foreach ($taggedServices as $id => $tags) {
             /** @var EmailDefinitionInterface $class */
             $class = $id;
-            $ids[$class::getKey()] = $id;
+            $ids[$class::getType()] = $id;
         }
 
         ksort($ids);

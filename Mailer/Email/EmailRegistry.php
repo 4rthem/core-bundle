@@ -11,7 +11,7 @@ class EmailRegistry
 
     public function addEmailDefinition(EmailDefinitionInterface $definition)
     {
-        $key = $definition::getKey();
+        $key = $definition::getType();
         if (isset($this->definitions[$key])) {
             throw new \InvalidArgumentException(sprintf('Definition "%s" already exists', $key));
         }
