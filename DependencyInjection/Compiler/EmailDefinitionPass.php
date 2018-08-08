@@ -24,7 +24,6 @@ class EmailDefinitionPass implements CompilerPassInterface
             /** @var EmailDefinitionInterface $class */
             $class = $id;
             $ids[$class::getType()] = $id;
-            $container->removeDefinition($id);
         }
 
         ksort($ids);
