@@ -5,17 +5,16 @@ namespace Arthem\Bundle\CoreBundle\Mailer\Email;
 class EmailRegistry
 {
     /**
-     * @var EmailDefinitionInterface[]
+     * @var array
      */
     private $definitions = [];
 
-    public function addEmailDefinition(EmailDefinitionInterface $definition)
+    public function addEmailDefinition(string $type, string $definition)
     {
-        $key = $definition::getType();
-        if (isset($this->definitions[$key])) {
-            throw new \InvalidArgumentException(sprintf('Definition "%s" already exists', $key));
+        if (isset($this->definitions[$type])) {
+            throw new \InvalidArgumentException(sprintf('Definition "%s" already exists', $type));
         }
-        $this->definitions[$key] = $definition;
+        $this->definitions[$type] = $definition;
     }
 
     public function getEmailKeys(): array
@@ -25,6 +24,6 @@ class EmailRegistry
 
     public function getEmail(string $key): EmailDefinitionInterface
     {
-        return $this->definitions[$key];
+        return new $this->definitions[$key];
     }
 }

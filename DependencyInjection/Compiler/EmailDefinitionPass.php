@@ -24,12 +24,13 @@ class EmailDefinitionPass implements CompilerPassInterface
             /** @var EmailDefinitionInterface $class */
             $class = $id;
             $ids[$class::getType()] = $id;
+            $container->removeDefinition($id);
         }
 
         ksort($ids);
 
-        foreach ($ids as $id) {
-            $registry->addMethodCall('addEmailDefinition', [new Reference($id)]);
+        foreach ($ids as $type => $id) {
+            $registry->addMethodCall('addEmailDefinition', [$type, $id]);
         }
     }
 }
