@@ -17,13 +17,13 @@ class EmailRegistry
         $this->definitions[$type] = $definition;
     }
 
-    public function getEmailKeys(): array
+    public function getDefinitions(): array
     {
         return array_keys($this->definitions);
     }
 
-    public function getEmail(string $key): EmailDefinitionInterface
+    public function getDefinition(string $type): EmailDefinitionInterface
     {
-        return new $this->definitions[$key];
+        return new $this->definitions[$type]();
     }
 }
