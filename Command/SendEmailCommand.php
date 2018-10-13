@@ -11,9 +11,14 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class SendEmailCommand extends ContainerAwareCommand
 {
+    const COMMAND_NAME = 'arthem:mailer:send';
+
+    protected static $defaultName = self::COMMAND_NAME;
+
+
     protected function configure()
     {
-        $this->setName('arthem:mailer:send')
+        $this
             ->setDefinition([
                 new InputArgument('email', InputArgument::REQUIRED),
                 new InputArgument('template', InputArgument::REQUIRED),
