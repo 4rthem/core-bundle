@@ -3,6 +3,7 @@
 namespace Arthem\Bundle\CoreBundle\Command;
 
 use Arthem\Bundle\CoreBundle\Mailer\Mailer;
+use Arthem\Bundle\CoreBundle\Mailer\MailerInterface;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -15,6 +16,16 @@ class SendEmailCommand extends ContainerAwareCommand
 
     protected static $defaultName = self::COMMAND_NAME;
 
+    /**
+     * @var MailerInterface
+     */
+    private $mailer;
+
+    public function __construct(MailerInterface $mailer)
+    {
+        $this->mailer = $mailer;
+        parent::__construct();
+    }
 
     protected function configure()
     {
@@ -42,8 +53,6 @@ class SendEmailCommand extends ContainerAwareCommand
             $attachments[] = realpath($attachment);
         }
 
-        $container
-            ->get(Mailer::class)
-            ->send($template, $toEmail, [], null, $attachments);
+        $this->mailer->send($template, $toEmail, [], null, $attachments);
     }
 }
