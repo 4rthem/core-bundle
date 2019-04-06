@@ -5,7 +5,7 @@
     "license": "MIT",
     "require": {
         "php": ">=7",
-        "symfony/symfony": "^3"
+        "symfony/framework-bundle": "^3|^4"
     },
     "autoload": {
         "psr-4": {
