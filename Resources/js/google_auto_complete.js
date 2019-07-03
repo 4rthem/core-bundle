@@ -80,15 +80,15 @@ exports.ArthemGoogleAutoComplete = function (
         }
     });
 
-    let lastFocusValue = $input.value.trim();
-    google.maps.event.addDomListener($input, 'blur', function () {
-        if (this.value.trim() !== lastFocusValue) {
-            if (!isValid()) {
-                $input.value = '';
-            }
-            lastFocusValue = $input.value.trim();
-        }
-    });
+    //let lastFocusValue = $input.value.trim();
+    // google.maps.event.addDomListener($input, 'blur', function () {
+    //     if (this.value.trim() !== lastFocusValue) {
+    //         if (!isValid()) {
+    //             $input.value = '';
+    //         }
+    //         lastFocusValue = $input.value.trim();
+    //     }
+    // });
 
     // When the user selects an address from the dropdown, populate the address
     // fields in the form.
