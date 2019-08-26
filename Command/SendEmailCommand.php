@@ -2,15 +2,14 @@
 
 namespace Arthem\Bundle\CoreBundle\Command;
 
-use Arthem\Bundle\CoreBundle\Mailer\Mailer;
 use Arthem\Bundle\CoreBundle\Mailer\MailerInterface;
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class SendEmailCommand extends ContainerAwareCommand
+class SendEmailCommand extends Command
 {
     const COMMAND_NAME = 'arthem:mailer:send';
 
@@ -43,8 +42,6 @@ class SendEmailCommand extends ContainerAwareCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $container = $this->getContainer();
-
         $toEmail = $input->getArgument('email');
         $template = $input->getArgument('template');
 
