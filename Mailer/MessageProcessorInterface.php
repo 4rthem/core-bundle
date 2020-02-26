@@ -2,7 +2,9 @@
 
 namespace Arthem\Bundle\CoreBundle\Mailer;
 
+use Symfony\Component\Mime\Email;
+
 interface MessageProcessorInterface
 {
-    public function process(\Swift_Message $message);
+    public function process(Email $message);
 }

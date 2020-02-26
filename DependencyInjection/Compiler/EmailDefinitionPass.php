@@ -6,7 +6,6 @@ use Arthem\Bundle\CoreBundle\Mailer\Email\EmailDefinitionInterface;
 use Arthem\Bundle\CoreBundle\Mailer\Email\EmailRegistry;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Reference;
 
 class EmailDefinitionPass implements CompilerPassInterface
 {

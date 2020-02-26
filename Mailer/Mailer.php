@@ -6,18 +6,23 @@ use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\Mailer\MailerInterface as SymfonyMailerInterface;
+use Symfony\Component\Mime\Address;
+use Symfony\Component\Mime\Email;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Twig\Environment;
+use Twig\TemplateWrapper;
 
 class Mailer implements MailerInterface, LoggerAwareInterface
 {
     /**
-     * @var \Swift_Mailer
+     * @var SymfonyMailerInterface
      */
     protected $mailer;
 
     /**
-     * @var \Twig_Environment
+     * @var Environment
      */
     protected $twig;
 
@@ -42,8 +47,8 @@ class Mailer implements MailerInterface, LoggerAwareInterface
     private $logger;
 
     public function __construct(
-        \Swift_Mailer $mailer,
-        \Twig_Environment $twig,
+        SymfonyMailerInterface $mailer,
+        Environment $twig,
         TokenStorageInterface $tokenStorage,
         $fromEmail,
         LoggerInterface $logger = null
@@ -51,7 +56,16 @@ class Mailer implements MailerInterface, LoggerAwareInterface
         $this->mailer = $mailer;
         $this->twig = $twig;
         $this->tokenStorage = $tokenStorage;
-        $this->fromEmail = $fromEmail;
+
+        if (is_array($fromEmail)) {
+            $address = array_keys($fromEmail)[0];
+            $this->fromEmail = new Address(
+                $address,
+                $fromEmail[$address]
+            );
+        } else {
+            $this->fromEmail = $fromEmail;
+        }
         $this->setLogger($logger ?? new NullLogger());
     }
 
@@ -72,7 +86,7 @@ class Mailer implements MailerInterface, LoggerAwareInterface
         $fromEmail = null,
         array $attachments = [],
         array $headers = []
-    ): \Swift_Message {
+    ): Email {
         if (null === $fromEmail) {
             $fromEmail = $this->fromEmail;
         }
@@ -87,7 +101,7 @@ class Mailer implements MailerInterface, LoggerAwareInterface
         $fromEmail = null,
         array $attachments = [],
         array $headers = []
-    ): \Swift_Message {
+    ): Email {
         if (null === $user) {
             $user = $this->getUser();
             if (!$user instanceof UserInterface) {
@@ -123,14 +137,7 @@ class Mailer implements MailerInterface, LoggerAwareInterface
     }
 
     /**
-     * @param string       $templateName
-     * @param array        $context
-     * @param array|string $fromEmail
-     * @param array|string $toEmail
-     * @param array        $attachments  An array of paths eg: ['/var/www/uploads/a.jpg', '/var/www/static/demo.pdf']
-     * @param array        $headers
-     *
-     * @return \Swift_Message
+     * {@inheritdoc}
      *
      * @noinspection PhpInternalEntityUsedInspection
      */
@@ -141,13 +148,13 @@ class Mailer implements MailerInterface, LoggerAwareInterface
         $toEmail,
         array $attachments = [],
         array $headers = []
-    ): \Swift_Message {
+    ): Email {
         $context['recipient_email'] = $toEmail;
 
         $context = $this->twig->mergeGlobals($context);
-        /** @var \Twig_Template $template */
+        /** @var TemplateWrapper $template */
         /** @noinspection PhpInternalEntityUsedInspection */
-        $template = $this->twig->loadTemplate($templateName);
+        $template = $this->twig->load($templateName);
         /** @noinspection PhpInternalEntityUsedInspection */
         $subject = $template->renderBlock('subject', $context);
         /** @noinspection PhpInternalEntityUsedInspection */
@@ -155,10 +162,11 @@ class Mailer implements MailerInterface, LoggerAwareInterface
         /** @noinspection PhpInternalEntityUsedInspection */
         $htmlBody = $template->renderBlock('body_html', $context);
 
-        /** @var \Swift_Message $message */
-        $message = (new \Swift_Message($subject))
-            ->setFrom($fromEmail)
-            ->setTo($toEmail);
+        /** @var Email $message */
+        $message = (new Email())
+            ->subject($subject)
+            ->from($fromEmail)
+            ->to($toEmail);
 
         $messageHeaders = $message->getHeaders();
         foreach ($headers as $key => $value) {
@@ -179,17 +187,14 @@ class Mailer implements MailerInterface, LoggerAwareInterface
         }
 
         if ($htmlBody) {
-            $message->setBody($htmlBody, 'text/html');
-            $message->addPart($textBody, 'text/plain');
+            $message->html($htmlBody);
+            $message->text($textBody);
         } else {
-            $message->setBody($textBody);
+            $message->text($textBody);
         }
 
         foreach ($attachments as $src) {
-            if (!$src instanceof \Swift_Mime_Attachment) {
-                $src = \Swift_Attachment::fromPath($src);
-            }
-            $message->attach($src);
+            $message->attachFromPath($src);
         }
 
         foreach ($this->processors as $processor) {

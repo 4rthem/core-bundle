@@ -13,8 +13,6 @@ interface GoogleAddressInterface
 
     /**
      * Set the entered address by the user.
-     *
-     * @param string|null $address
      */
     public function setInputAddress(string $address = null);
 
@@ -23,9 +21,6 @@ interface GoogleAddressInterface
      */
     public function getAddressLine1();
 
-    /**
-     * @param string|null $addressLine1
-     */
     public function setAddressLine1(string $addressLine1 = null);
 
     /**
@@ -33,9 +28,6 @@ interface GoogleAddressInterface
      */
     public function getAddressLine2();
 
-    /**
-     * @param string|null $addressLine2
-     */
     public function setAddressLine2(string $addressLine2 = null);
 
     /**
@@ -43,9 +35,6 @@ interface GoogleAddressInterface
      */
     public function getCity();
 
-    /**
-     * @param string|null $city
-     */
     public function setCity(string $city = null);
 
     /**
@@ -53,9 +42,6 @@ interface GoogleAddressInterface
      */
     public function getRegion();
 
-    /**
-     * @param string|null $region
-     */
     public function setRegion(string $region = null);
 
     /**
@@ -63,9 +49,6 @@ interface GoogleAddressInterface
      */
     public function getPostalCode();
 
-    /**
-     * @param string|null $postalCode
-     */
     public function setPostalCode(string $postalCode = null);
 
     /**
@@ -73,9 +56,6 @@ interface GoogleAddressInterface
      */
     public function getCountry();
 
-    /**
-     * @param string|null $country
-     */
     public function setCountry(string $country = null);
 
     /**
