@@ -17,7 +17,8 @@ interface MailerInterface
         array $params = [],
         $fromEmail = null,
         array $attachments = [],
-        array $headers = []
+        array $headers = [],
+        array $options = []
     ): Email;
 
     /**
@@ -31,6 +32,7 @@ interface MailerInterface
         MailerUserInterface $user = null,
         $fromEmail = null,
         array $attachments = [],
-        array $headers = []
+        array $headers = [],
+        array $options = []
     ): Email;
 }

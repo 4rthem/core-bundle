@@ -85,13 +85,14 @@ class Mailer implements MailerInterface, LoggerAwareInterface
         array $params = [],
         $fromEmail = null,
         array $attachments = [],
-        array $headers = []
+        array $headers = [],
+        array $options = []
     ): Email {
         if (null === $fromEmail) {
             $fromEmail = $this->fromEmail;
         }
 
-        return $this->sendMessage($templateName, $params, $fromEmail, $toEmail, $attachments, $headers);
+        return $this->sendMessage($templateName, $params, $fromEmail, $toEmail, $attachments, $headers, $options);
     }
 
     public function sendToUser(
@@ -100,7 +101,8 @@ class Mailer implements MailerInterface, LoggerAwareInterface
         MailerUserInterface $user = null,
         $fromEmail = null,
         array $attachments = [],
-        array $headers = []
+        array $headers = [],
+        array $options = []
     ): Email {
         if (null === $user) {
             $user = $this->getUser();
@@ -111,7 +113,7 @@ class Mailer implements MailerInterface, LoggerAwareInterface
 
         return $this->send($templateName, $user->getEmail(), array_merge([
             'user' => $user,
-        ], $params), $fromEmail, $attachments, $headers);
+        ], $params), $fromEmail, $attachments, $headers, $options);
     }
 
     /**
@@ -147,7 +149,8 @@ class Mailer implements MailerInterface, LoggerAwareInterface
         $fromEmail,
         $toEmail,
         array $attachments = [],
-        array $headers = []
+        array $headers = [],
+        array $options = []
     ): Email {
         $context['recipient_email'] = $toEmail;
 
@@ -167,6 +170,10 @@ class Mailer implements MailerInterface, LoggerAwareInterface
             ->subject($subject)
             ->from($fromEmail)
             ->to($toEmail);
+
+        if (isset($options['reply_to'])) {
+            $message->replyTo($options['reply_to']);
+        }
 
         $messageHeaders = $message->getHeaders();
         foreach ($headers as $key => $value) {
