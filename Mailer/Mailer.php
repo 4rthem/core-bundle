@@ -9,6 +9,7 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\Mailer\MailerInterface as SymfonyMailerInterface;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Mime\Email;
+use Symfony\Component\Mime\Header\HeaderInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Twig\Environment;
@@ -177,7 +178,9 @@ class Mailer implements MailerInterface, LoggerAwareInterface
 
         $messageHeaders = $message->getHeaders();
         foreach ($headers as $key => $value) {
-            if (is_array($value)) {
+            if ($value instanceof HeaderInterface) {
+                $messageHeaders->add($value);
+            } elseif (is_array($value)) {
                 foreach ($value as $v) {
                     $messageHeaders->addTextHeader($key, $v);
                 }
