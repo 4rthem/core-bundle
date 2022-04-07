@@ -51,5 +51,7 @@ class SendEmailCommand extends Command
         }
 
         $this->mailer->send($template, $toEmail, [], null, $attachments);
+
+        return 0;
     }
 }

@@ -6,3 +6,7 @@ services:
     Arthem\Bundle\CoreBundle\Mailer\Mailer: ~
 
     Arthem\Bundle\CoreBundle\Mailer\MailerInterface: "@Arthem\\Bundle\\CoreBundle\\Mailer\\Mailer"
+
+    Arthem\Bundle\CoreBundle\Command\SendEmailCommand:
+        tags:
+            - { name: 'console.command', command: 'arthem:mailer:send' }
