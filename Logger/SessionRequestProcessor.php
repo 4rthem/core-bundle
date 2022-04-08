@@ -2,37 +2,30 @@
 
 namespace Arthem\Bundle\CoreBundle\Logger;
 
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use RuntimeException;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class SessionRequestProcessor
 {
-    /**
-     * @var ContainerInterface
-     */
-    private $container;
+    private SessionInterface $session;
+    private ?string $token = null;
 
-    /**
-     * @var string|null
-     */
-    private $token;
-
-    public function __construct(ContainerInterface $container)
+    public function __construct(SessionInterface $session)
     {
-        $this->container = $container;
+        $this->session = $session;
     }
 
     public function processRecord(array $record)
     {
         if (null === $this->token) {
-            $session = $this->container->get('session');
-            if (!$session->isStarted()) {
+            if (!$this->session->isStarted()) {
                 return $record;
             }
 
             try {
-                $sessionId = substr($session->getId(), 0, 8);
+                $sessionId = substr($this->session->getId(), 0, 8);
                 $this->token = $sessionId;
-            } catch (\RuntimeException $e) {
+            } catch (RuntimeException $e) {
                 $this->token = 'session-error';
             }
             $this->token .= '-'.substr(uniqid(), -8);
