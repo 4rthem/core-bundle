@@ -11,7 +11,6 @@ use Symfony\Component\Mime\Address;
 use Symfony\Component\Mime\Email;
 use Symfony\Component\Mime\Header\HeaderInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
 use Twig\Environment;
 use Twig\TemplateWrapper;
 
@@ -47,10 +46,13 @@ class Mailer implements MailerInterface, LoggerAwareInterface
      */
     private $logger;
 
+    private RenderingContext $renderingContext;
+
     public function __construct(
         SymfonyMailerInterface $mailer,
         Environment $twig,
         TokenStorageInterface $tokenStorage,
+        RenderingContext $renderingContext,
         $fromEmail,
         LoggerInterface $logger = null
     ) {
@@ -68,6 +70,7 @@ class Mailer implements MailerInterface, LoggerAwareInterface
             $this->fromEmail = $fromEmail;
         }
         $this->setLogger($logger ?? new NullLogger());
+        $this->renderingContext = $renderingContext;
     }
 
     public function setLogger(LoggerInterface $logger)
@@ -107,9 +110,13 @@ class Mailer implements MailerInterface, LoggerAwareInterface
     ): Email {
         if (null === $user) {
             $user = $this->getUser();
-            if (!$user instanceof UserInterface) {
+            if (!$user instanceof MailerUserInterface) {
                 throw new AccessDeniedHttpException('User is not defined for mail');
             }
+        }
+
+        if ($user instanceof MailerLocaleUserInterface) {
+            $this->renderingContext->setLocale($locale ?? 'en');
         }
 
         return $this->send($templateName, $user->getEmail(), array_merge([
