@@ -16,20 +16,9 @@ use Twig\TemplateWrapper;
 
 class Mailer implements MailerInterface, LoggerAwareInterface
 {
-    /**
-     * @var SymfonyMailerInterface
-     */
-    protected $mailer;
-
-    /**
-     * @var Environment
-     */
-    protected $twig;
-
-    /**
-     * @var TokenStorageInterface
-     */
-    private $tokenStorage;
+    protected SymfonyMailerInterface $mailer;
+    protected Environment $twig;
+    private TokenStorageInterface $tokenStorage;
 
     /**
      * @var string|array
@@ -39,13 +28,9 @@ class Mailer implements MailerInterface, LoggerAwareInterface
     /**
      * @var MessageProcessorInterface[]
      */
-    private $processors = [];
+    private array $processors = [];
 
-    /**
-     * @var LoggerInterface
-     */
-    private $logger;
-
+    private LoggerInterface $logger;
     private RenderingContext $renderingContext;
 
     public function __construct(
@@ -116,7 +101,7 @@ class Mailer implements MailerInterface, LoggerAwareInterface
         }
 
         if ($user instanceof MailerLocaleUserInterface) {
-            $this->renderingContext->setLocale($locale ?? 'en');
+            $options['locale'] = $user->getLocale();
         }
 
         return $this->send($templateName, $user->getEmail(), array_merge([
@@ -160,6 +145,9 @@ class Mailer implements MailerInterface, LoggerAwareInterface
         array $headers = [],
         array $options = []
     ): Email {
+        if (isset($options['locale'])) {
+            $this->renderingContext->setLocale($options['locale']);
+        }
         $context['recipient_email'] = $toEmail;
 
         $context = $this->twig->mergeGlobals($context);
@@ -205,10 +193,8 @@ class Mailer implements MailerInterface, LoggerAwareInterface
 
         if ($htmlBody) {
             $message->html($htmlBody);
-            $message->text($textBody);
-        } else {
-            $message->text($textBody);
         }
+        $message->text($textBody);
 
         foreach ($attachments as $src) {
             $message->attachFromPath($src);
