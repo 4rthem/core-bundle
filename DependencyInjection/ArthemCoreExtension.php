@@ -19,7 +19,7 @@ class ArthemCoreExtension extends Extension
     /**
      * {@inheritdoc}
      */
-    public function load(array $configs, ContainerBuilder $container)
+    public function load(array $configs, ContainerBuilder $container): void
     {
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
@@ -37,12 +37,6 @@ class ArthemCoreExtension extends Extension
             if ($config['mailer']['translation_mailer']['enabled']) {
                 $loader->load('translation_mailer.yml');
             }
-        }
-
-        if (isset($config['form']['google_auto_complete']['enabled'])) {
-            $loader->load('form/google_auto_complete.yml');
-            $definition = $container->getDefinition(GoogleAutoCompleteType::class);
-            $definition->replaceArgument(0, $config['form']['google_auto_complete']['api_key']);
         }
     }
 }

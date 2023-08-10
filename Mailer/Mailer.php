@@ -70,9 +70,9 @@ class Mailer implements MailerInterface, LoggerAwareInterface
 
     public function send(
         string $templateName,
-        $toEmail,
+        array|string $toEmail,
         array $params = [],
-        $fromEmail = null,
+        array|string $fromEmail = null,
         array $attachments = [],
         array $headers = [],
         array $options = []
@@ -88,7 +88,7 @@ class Mailer implements MailerInterface, LoggerAwareInterface
         string $templateName,
         array $params = [],
         MailerUserInterface $user = null,
-        $fromEmail = null,
+        array|string $fromEmail = null,
         array $attachments = [],
         array $headers = [],
         array $options = []

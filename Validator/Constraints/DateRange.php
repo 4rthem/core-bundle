@@ -11,11 +11,11 @@ use Symfony\Component\Validator\Constraint;
  */
 class DateRange extends Constraint
 {
-    public $message = 'date_range.invalid';
+    public string $message = 'date_range.invalid';
 
-    public $startDate = 'startDate';
+    public string $startDate = 'startDate';
 
-    public $endDate = 'endDate';
+    public string $endDate = 'endDate';
 
     /**
      * {@inheritdoc}

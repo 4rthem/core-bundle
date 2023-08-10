@@ -3,6 +3,4 @@ services:
         autowire: true
         autoconfigure: true
 
-    Arthem\Bundle\CoreBundle\Command\SendEmailCommand:
-        tags:
-            - { name: 'console.command', command: 'arthem:mailer:send' }
+    Arthem\Bundle\CoreBundle\Command\SendEmailCommand: ~

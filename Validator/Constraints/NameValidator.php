@@ -11,7 +11,7 @@ class NameValidator extends ConstraintValidator
      * @param mixed           $value
      * @param Name|Constraint $constraint
      */
-    public function validate($value, Constraint $constraint)
+    public function validate(mixed $value, Constraint $constraint): void
     {
         if (null !== $value && '' !== $value) {
             if (!preg_match('#^[\w '.preg_quote($constraint->allowedSpecialChars, '#').']+$#usi', $value)) {

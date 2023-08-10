@@ -9,7 +9,7 @@ use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 
 class ValidateValidator extends ConstraintValidator
 {
-    public function validate($value, Constraint $constraint)
+    public function validate(mixed $value, Constraint $constraint): void
     {
         if (!$constraint instanceof Validate) {
             throw new UnexpectedTypeException($constraint, __NAMESPACE__.'\Validate');
@@ -19,7 +19,6 @@ class ValidateValidator extends ConstraintValidator
             return;
         }
 
-        /* @var $context ExecutionContextInterface */
         $context = $this->context;
         $validationGroup = $context->getGroup();
 

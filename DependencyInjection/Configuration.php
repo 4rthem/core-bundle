@@ -15,7 +15,7 @@ class Configuration implements ConfigurationInterface
     /**
      * {@inheritdoc}
      */
-    public function getConfigTreeBuilder()
+    public function getConfigTreeBuilder(): TreeBuilder
     {
         $treeBuilder = new TreeBuilder('arthem_core');
         $rootNode = $treeBuilder->getRootNode();
@@ -30,16 +30,6 @@ class Configuration implements ConfigurationInterface
                         ->scalarNode('mode')->defaultValue('default')->end()
                         ->arrayNode('translation_mailer')
                             ->canBeEnabled()
-                        ->end()
-                    ->end()
-                ->end()
-                ->arrayNode('form')
-                    ->children()
-                        ->arrayNode('google_auto_complete')
-                            ->canBeEnabled()
-                            ->children()
-                                ->scalarNode('api_key')->isRequired()->end()
-                            ->end()
                         ->end()
                     ->end()
                 ->end()

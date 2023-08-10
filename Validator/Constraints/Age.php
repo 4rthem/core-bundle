@@ -11,13 +11,13 @@ use Symfony\Component\Validator\Constraint;
  */
 class Age extends Constraint
 {
-    public $minMessage = 'age.min';
+    public string $minMessage = 'age.min';
 
-    public $maxMessage = 'age.max';
+    public string $maxMessage = 'age.max';
 
-    public $minAge = 18;
+    public int $minAge = 18;
 
-    public $maxAge = 130;
+    public int $maxAge = 130;
 
     /**
      * {@inheritdoc}

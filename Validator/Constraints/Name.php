@@ -11,7 +11,7 @@ use Symfony\Component\Validator\Constraint;
  */
 class Name extends Constraint
 {
-    public $message = 'name.invalid';
+    public string $message = 'name.invalid';
 
-    public $allowedSpecialChars = '-\'’';
+    public string $allowedSpecialChars = '-\'’';
 }

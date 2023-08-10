@@ -3,30 +3,24 @@
 namespace Arthem\Bundle\CoreBundle\Command;
 
 use Arthem\Bundle\CoreBundle\Mailer\MailerInterface;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
+#[AsCommand(name: self::COMMAND_NAME)]
 class SendEmailCommand extends Command
 {
-    const COMMAND_NAME = 'arthem:mailer:send';
+    final public const COMMAND_NAME = 'arthem:mailer:send';
 
-    protected static $defaultName = self::COMMAND_NAME;
-
-    /**
-     * @var MailerInterface
-     */
-    private $mailer;
-
-    public function __construct(MailerInterface $mailer)
+    public function __construct(private readonly MailerInterface $mailer)
     {
-        $this->mailer = $mailer;
         parent::__construct();
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setDefinition([
@@ -40,7 +34,7 @@ class SendEmailCommand extends Command
             ]);
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $toEmail = $input->getArgument('email');
         $template = $input->getArgument('template');
@@ -52,6 +46,6 @@ class SendEmailCommand extends Command
 
         $this->mailer->send($template, $toEmail, [], null, $attachments);
 
-        return 0;
+        return Command::SUCCESS;
     }
 }

@@ -6,5 +6,5 @@ use Symfony\Component\Mime\Email;
 
 interface MessageProcessorInterface
 {
-    public function process(Email $message);
+    public function process(Email $message): void;
 }

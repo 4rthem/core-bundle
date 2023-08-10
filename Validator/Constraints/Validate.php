@@ -14,14 +14,14 @@ class Validate extends Constraint
     /**
      * @var string[]|null
      */
-    public $map;
+    public ?array $map = null;
 
     /**
      * @var string|null
      */
-    public $testCallback;
+    public ?string $testCallback = null;
 
-    public function __construct($options = null)
+    public function __construct(mixed $options = null)
     {
         parent::__construct($options);
         if (null !== $this->map) {
@@ -36,7 +36,7 @@ class Validate extends Constraint
     /**
      * {@inheritdoc}
      */
-    public function getDefaultOption()
+    public function getDefaultOption(): ?string
     {
         return 'map';
     }

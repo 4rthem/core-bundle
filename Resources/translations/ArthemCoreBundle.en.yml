@@ -10,20 +10,6 @@ staging:
         remember_me: Remember me
         submit: Continue
 
-form:
-    select2:
-        placeholder: Type something...
-        no_matches: No result
-        searching: Loading ...
-    csrf:
-        invalid: Form has expired. Please submit again!
-    collection:
-        add: Add
-        delete: Remove
-    gmap:
-        autocomplete:
-            placeholder: Enter a location ...
-
 contact:
     flashes:
         message:
