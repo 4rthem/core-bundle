@@ -104,7 +104,12 @@ class Mailer implements MailerInterface, LoggerAwareInterface
             $options['locale'] = $user->getLocale();
         }
 
-        return $this->send($templateName, $user->getEmail(), array_merge([
+        $toEmail = $user->getEmail();
+        if (empty($toEmail)) {
+            throw new \InvalidArgumentException(sprintf('Trying to send mail "%s" to an empty email address', $templateName));
+        }
+
+        return $this->send($templateName, $toEmail, array_merge([
             'user' => $user,
         ], $params), $fromEmail, $attachments, $headers, $options);
     }
