@@ -3,6 +3,7 @@
 namespace Arthem\Bundle\CoreBundle\Mailer;
 
 use Psr\Log\LoggerAwareInterface;
+use Psr\Log\LoggerAwareTrait;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
@@ -16,6 +17,8 @@ use Twig\TemplateWrapper;
 
 class Mailer implements MailerInterface, LoggerAwareInterface
 {
+    use LoggerAwareTrait;
+
     protected SymfonyMailerInterface $mailer;
     protected Environment $twig;
     private TokenStorageInterface $tokenStorage;
@@ -30,7 +33,6 @@ class Mailer implements MailerInterface, LoggerAwareInterface
      */
     private array $processors = [];
 
-    private LoggerInterface $logger;
     private RenderingContext $renderingContext;
 
     public function __construct(
@@ -56,11 +58,6 @@ class Mailer implements MailerInterface, LoggerAwareInterface
         }
         $this->setLogger($logger ?? new NullLogger());
         $this->renderingContext = $renderingContext;
-    }
-
-    public function setLogger(LoggerInterface $logger)
-    {
-        $this->logger = $logger;
     }
 
     public function addProcessor(MessageProcessorInterface $processor)
