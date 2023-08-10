@@ -2,9 +2,8 @@
 
 namespace Arthem\Bundle\CoreBundle\Logger;
 
-use RuntimeException;
+use Monolog\LogRecord;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class SessionRequestProcessor
 {
@@ -14,7 +13,7 @@ class SessionRequestProcessor
     {
     }
 
-    public function processRecord(array $record): array
+    public function processRecord(LogRecord $record): LogRecord
     {
         $session = $this->requestStack->getCurrentRequest()?->getSession();
         if (null === $session) {
@@ -29,7 +28,7 @@ class SessionRequestProcessor
             try {
                 $sessionId = substr($session->getId(), 0, 8);
                 $this->token = $sessionId;
-            } catch (RuntimeException $e) {
+            } catch (\RuntimeException $e) {
                 $this->token = 'session-error';
             }
             $this->token .= '-'.substr(uniqid(), -8);
