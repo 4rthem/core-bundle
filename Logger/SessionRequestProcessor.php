@@ -3,27 +3,31 @@
 namespace Arthem\Bundle\CoreBundle\Logger;
 
 use RuntimeException;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class SessionRequestProcessor
 {
-    private SessionInterface $session;
     private ?string $token = null;
 
-    public function __construct(SessionInterface $session)
+    public function __construct(private readonly RequestStack $requestStack)
     {
-        $this->session = $session;
     }
 
-    public function processRecord(array $record)
+    public function processRecord(array $record): array
     {
+        $session = $this->requestStack->getCurrentRequest()?->getSession();
+        if (null === $session) {
+            return $record;
+        }
+
         if (null === $this->token) {
-            if (!$this->session->isStarted()) {
+            if (!$session->isStarted()) {
                 return $record;
             }
 
             try {
-                $sessionId = substr($this->session->getId(), 0, 8);
+                $sessionId = substr($session->getId(), 0, 8);
                 $this->token = $sessionId;
             } catch (RuntimeException $e) {
                 $this->token = 'session-error';
