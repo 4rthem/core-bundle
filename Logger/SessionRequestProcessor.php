@@ -3,38 +3,29 @@
 namespace Arthem\Bundle\CoreBundle\Logger;
 
 use Monolog\LogRecord;
+use Symfony\Component\HttpFoundation\Exception\SessionNotFoundException;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 class SessionRequestProcessor
 {
-    private ?string $token = null;
-
     public function __construct(private readonly RequestStack $requestStack)
     {
     }
 
     public function processRecord(LogRecord $record): LogRecord
     {
-        $session = $this->requestStack->getCurrentRequest()?->getSession();
-        if (null === $session) {
+        try {
+            $session = $this->requestStack->getSession();
+        } catch (SessionNotFoundException) {
+            return $record;
+        }
+        if (!$session->isStarted()) {
             return $record;
         }
 
-        if (null === $this->token) {
-            if (!$session->isStarted()) {
-                return $record;
-            }
+        $sessionId = substr($session->getId(), 0, 8) ?: '????????';
 
-            try {
-                $sessionId = substr($session->getId(), 0, 8);
-                $this->token = $sessionId;
-            } catch (\RuntimeException $e) {
-                $this->token = 'session-error';
-            }
-            $this->token .= '-'.substr(uniqid(), -8);
-        }
-
-        $record['extra']['token'] = $this->token;
+        $record->extra['token'] = $sessionId.'-'.substr(uniqid('', true), -8);
 
         return $record;
     }
