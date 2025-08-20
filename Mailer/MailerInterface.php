@@ -13,7 +13,7 @@ interface MailerInterface
         string $templateName,
         array|string $toEmail,
         array $params = [],
-        array|string $fromEmail = null,
+        array|string|null $fromEmail = null,
         array $attachments = [],
         array $headers = [],
         array $options = []
@@ -25,8 +25,8 @@ interface MailerInterface
     public function sendToUser(
         string $templateName,
         array $params = [],
-        MailerUserInterface $user = null,
-        array|string $fromEmail = null,
+        ?MailerUserInterface $user = null,
+        array|string|null $fromEmail = null,
         array $attachments = [],
         array $headers = [],
         array $options = []

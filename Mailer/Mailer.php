@@ -19,34 +19,21 @@ class Mailer implements MailerInterface, LoggerAwareInterface
 {
     use LoggerAwareTrait;
 
-    protected SymfonyMailerInterface $mailer;
-    protected Environment $twig;
-    private TokenStorageInterface $tokenStorage;
-
-    /**
-     * @var string|array
-     */
-    private $fromEmail;
+    private Address $fromEmail;
 
     /**
      * @var MessageProcessorInterface[]
      */
     private array $processors = [];
 
-    private RenderingContext $renderingContext;
-
     public function __construct(
-        SymfonyMailerInterface $mailer,
-        Environment $twig,
-        TokenStorageInterface $tokenStorage,
-        RenderingContext $renderingContext,
-        $fromEmail,
-        LoggerInterface $logger = null
+        private SymfonyMailerInterface $mailer,
+        private Environment $twig,
+        private TokenStorageInterface $tokenStorage,
+        private RenderingContext $renderingContext,
+        string|array $fromEmail,
+        ?LoggerInterface $logger = null
     ) {
-        $this->mailer = $mailer;
-        $this->twig = $twig;
-        $this->tokenStorage = $tokenStorage;
-
         if (is_array($fromEmail)) {
             $address = array_keys($fromEmail)[0];
             $this->fromEmail = new Address(
@@ -54,10 +41,9 @@ class Mailer implements MailerInterface, LoggerAwareInterface
                 $fromEmail[$address]
             );
         } else {
-            $this->fromEmail = $fromEmail;
+            $this->fromEmail = new Address($fromEmail);
         }
         $this->setLogger($logger ?? new NullLogger());
-        $this->renderingContext = $renderingContext;
     }
 
     public function addProcessor(MessageProcessorInterface $processor)
@@ -69,7 +55,7 @@ class Mailer implements MailerInterface, LoggerAwareInterface
         string $templateName,
         array|string $toEmail,
         array $params = [],
-        array|string $fromEmail = null,
+        array|string|null $fromEmail = null,
         array $attachments = [],
         array $headers = [],
         array $options = []
@@ -84,8 +70,8 @@ class Mailer implements MailerInterface, LoggerAwareInterface
     public function sendToUser(
         string $templateName,
         array $params = [],
-        MailerUserInterface $user = null,
-        array|string $fromEmail = null,
+        ?MailerUserInterface $user = null,
+        array|string|null $fromEmail = null,
         array $attachments = [],
         array $headers = [],
         array $options = []

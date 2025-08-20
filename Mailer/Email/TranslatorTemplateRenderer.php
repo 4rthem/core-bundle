@@ -2,39 +2,22 @@
 
 namespace Arthem\Bundle\CoreBundle\Mailer\Email;
 
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
+use Twig\Environment;
 
 class TranslatorTemplateRenderer implements TemplateRendererInterface
 {
-    /**
-     * @var \Twig_Environment
-     */
-    private $twig;
+    private string $domain = 'email';
 
-    /**
-     * @var TranslatorInterface
-     */
-    private $translator;
+    private string $contentKeyPattern = 'email.%s.content';
 
-    /**
-     * @var string
-     */
-    private $domain = 'email';
+    private string $subjectKeyPattern = 'email.%s.subject';
 
-    /**
-     * @var string
-     */
-    private $contentKeyPattern = 'email.%s.content';
-
-    /**
-     * @var string
-     */
-    private $subjectKeyPattern = 'email.%s.subject';
-
-    public function __construct(\Twig_Environment $twig, TranslatorInterface $translator)
+    public function __construct(
+        private Environment $twig,
+        private TranslatorInterface $translator,
+    )
     {
-        $this->twig = $twig;
-        $this->translator = $translator;
     }
 
     public function setTranslator(TranslatorInterface $translator)

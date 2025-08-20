@@ -14,7 +14,13 @@
         "symfony/twig-bundle": "^6",
         "symfony/mailer": "^6",
         "symfony/validator": "^6",
-        "symfony/monolog-bundle": "^3.8"
+        "symfony/monolog-bundle": "^3.8",
+        "phpstan/phpstan": "^2.1"
+    },
+    "scripts": {
+        "cs": "vendor/bin/php-cs-fixer fix",
+        "stan": "vendor/bin/php-cs-fixer fix",
+        "phpstan": "vendor/bin/phpstan analyse --memory-limit 512M Command DependencyInjection Logger Mailer Validator --level 2"
     },
     "autoload": {
         "psr-4": {

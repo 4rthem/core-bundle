@@ -2,25 +2,18 @@
 
 namespace Arthem\Bundle\CoreBundle\Mailer\Email;
 
+use Twig\Environment;
+use Twig\Loader\FilesystemLoader;
+
 class TwigTemplateRenderer implements TemplateRendererInterface
 {
-    /**
-     * @var \Twig_Environment
-     */
-    private $twig;
-
-    /**
-     * @var string
-     */
-    private $templateDir;
-
-    public function __construct(\Twig_Environment $twig, string $templateDir)
+    public function __construct(
+        private Environment $twig,
+        private string $templateDir,
+    )
     {
-        $this->twig = $twig;
-        $this->templateDir = $templateDir;
-
         $loader = $this->twig->getLoader();
-        if ($loader instanceof \Twig_Loader_Filesystem) {
+        if ($loader instanceof FilesystemLoader) {
             if (!is_dir($this->templateDir)) {
                 mkdir($this->templateDir);
             }
