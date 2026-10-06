@@ -42,6 +42,14 @@ final class ValidatorTest extends KernelTestCase
         ], $this->messagesByPath($violations));
     }
 
+    public function testFutureBirthDateIsRejected(): void
+    {
+        $booking = new Booking();
+        $booking->birthDate = new \DateTimeImmutable('+25 years');
+
+        self::assertSame(['birthDate' => 'You must be over 21'], $this->messagesByPath($this->validator()->validate($booking)));
+    }
+
     public function testViolationsAreTranslatedInFrench(): void
     {
         $booking = new Booking();

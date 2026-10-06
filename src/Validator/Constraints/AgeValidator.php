@@ -23,7 +23,7 @@ class AgeValidator extends ConstraintValidator
             throw new UnexpectedValueException($value, \DateTimeInterface::class);
         }
 
-        $age = (int) $value->diff(new \DateTimeImmutable())->format('%y');
+        $age = (int) $value->diff(new \DateTimeImmutable())->format('%r%y');
         if ($age < $constraint->minAge) {
             $this->context->addViolation($constraint->minMessage, ['{{ min_age }}' => $constraint->minAge]);
         }
