@@ -1,0 +1,11 @@
+{% extends '@ArthemCore/Mail/base.html.twig' %}
+
+{% block subject %}Welcome {{ name }}{% endblock %}
+
+{% block content_text %}
+Hello {{ name }}, this mail goes to {{ recipient_email }}.
+{% endblock %}
+
+{% block content_html %}
+    <p>Hello <strong>{{ name }}</strong>, this mail goes to {{ recipient_email }}.</p>
+{% endblock %}
