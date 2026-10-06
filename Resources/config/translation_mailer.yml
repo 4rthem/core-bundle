@@ -1,6 +1,0 @@
-
-services:
-    _defaults:
-        autowire: true
-
-    Arthem\Bundle\CoreBundle\Mailer\Email\EmailRegistry: ~
