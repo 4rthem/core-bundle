@@ -27,6 +27,9 @@
         "symfony/yaml": "^6.4 || ^7.0 || ^8.0",
         "twig/twig": "^3.0"
     },
+    "conflict": {
+        "monolog/monolog": "<3.0"
+    },
     "suggest": {
         "symfony/mailer": "To send templated emails with Arthem\\Bundle\\CoreBundle\\Mailer\\MailerInterface",
         "symfony/monolog-bundle": "To tag log records with the current session",
