@@ -20,6 +20,7 @@
         "symfony/mailer": "^6.4 || ^7.0 || ^8.0",
         "symfony/monolog-bundle": "^3.8 || ^4.0",
         "symfony/property-access": "^6.4 || ^7.0 || ^8.0",
+        "symfony/runtime": "^6.4 || ^7.0 || ^8.0",
         "symfony/translation": "^6.4 || ^7.0 || ^8.0",
         "symfony/twig-bundle": "^6.4 || ^7.0 || ^8.0",
         "symfony/validator": "^6.4 || ^7.0 || ^8.0",
@@ -44,7 +45,10 @@
         }
     },
     "config": {
-        "sort-packages": true
+        "sort-packages": true,
+        "allow-plugins": {
+            "symfony/runtime": true
+        }
     },
     "scripts": {
         "cs": "php-cs-fixer fix",
